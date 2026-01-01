@@ -19,4 +19,6 @@ return [
     'password.string'   => 'The password must be a valid string.',
     'password.min'      => 'The password must be at least 6 characters.',
     'password.max'      => 'The password may not be greater than 255 characters.',
+
+    'login.required' => 'The login field is required.',
 ];

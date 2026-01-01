@@ -6,8 +6,9 @@ use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Interfaces\Auth\AuthInterface;
+use App\Interfaces\Auth\AuthLoginInterface;
 
-class AuthRepository implements AuthInterface
+class AuthRepository implements AuthInterface, AuthLoginInterface
 {
     /**
      * Create a new class instance.
@@ -34,6 +35,24 @@ class AuthRepository implements AuthInterface
             "phone" => $validationAuthRequest['phone'],
             "password" => Hash::make($validationAuthRequest['password']),
         ]);
+        return $user;
+    }
+
+    public function methodLoginInterface($validationDataRequest)
+    {
+        $user = User::where(function ($query) use ($validationDataRequest) {
+            $query->where('email', $validationDataRequest['login'])
+                ->orWhere('phone', $validationDataRequest['login']);
+        })->first();
+
+        if (!$user) {
+            throw new Exception(__('messages.noData'));   
+        }
+
+        if (!Hash::check($validationDataRequest['password'], $user->password)) {
+            throw new Exception(__('messages.noPassword')); 
+        }
+
         return $user;
     }
 }
