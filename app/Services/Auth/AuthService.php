@@ -25,6 +25,7 @@ class AuthService implements AuthInterface ,AuthLoginInterface
 
     public function methodLoginInterface($validationDataRequest){
         $returnDataLoginFromService = $this->sendDataLoginFromServiceToRepositoryByInterface->methodLoginInterface($validationDataRequest);
-        return $returnDataLoginFromService;
+        $token = $returnDataLoginFromService->createToken('auth-token')->plainTextToken;
+        return $token;
     }
 }
