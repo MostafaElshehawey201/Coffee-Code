@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Requests\Auth;
+
+use Exception;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
+class AuthForgetPasswordRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            "login" => "required",
+        ];
+    }
+
+    public function messages(){
+        return [
+            "login.required" => __('validation.login.required'),
+        ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        $errors = [];
+        $validationMessages = Lang::get('validation');
+        foreach($validator->errors()->getMessages() as $failed => $messages){
+            foreach($messages as $message){
+                $errors[$failed][] = [
+                    "message" => $message,
+                ];
+                break;
+            }
+        }
+        if(is_array($validationMessages)){
+            foreach($validationMessages as $value){
+                if(is_array($value) && isset($value['message']) && $value['message'] === $message){
+                    $errors[$failed][] =[
+                        "message" => $value['message'],
+                    ];
+                } 
+            }
+        }
+        throw new HttpResponseException(
+            response()->json([
+                "success" => false ,
+                "data" => null,
+                "errors" => $errors,
+            ],422)
+        );
+    }
+}

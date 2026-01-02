@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\AuthForgetPasswordRequest;
 use App\Http\Requests\Auth\AuthRequest;
 use App\Http\Requests\Auth\AuthRequestLogin;
 use App\Interfaces\Auth\AuthInterface;
@@ -42,7 +43,26 @@ class AuthController extends Controller
             $returnDataLoginFromService = $this->auth_service->methodLoginInterface($validationDataRequest);
             return response()->json([
                 "success" => true,
-                "data-user" => $returnDataLoginFromService,
+                "data" => $returnDataLoginFromService,
+                "errors" => null,
+            ], 200);
+        } catch (Exception $errors) {
+            return response()->json([
+                "success" => false,
+                "data" => null,
+                "errors" => $errors->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function forgetPassword(AuthForgetPasswordRequest $authForgetPasswordRequest)
+    {
+        $validationForgetPasswordRequest = $authForgetPasswordRequest->validated();
+        try {
+            $returnForgetPasswordDataFromService = $this->auth_service->methodForgetPasswordInterface($validationForgetPasswordRequest);
+            return response()->json([
+                "success" => true,
+                "data" => $returnForgetPasswordDataFromService,
                 "errors" => null,
             ], 200);
         } catch (Exception $errors) {
