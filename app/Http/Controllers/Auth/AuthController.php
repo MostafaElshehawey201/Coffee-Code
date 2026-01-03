@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\AuthCheckOtpForgetPasswordRequest;
 use App\Http\Requests\Auth\AuthForgetPasswordRequest;
 use App\Http\Requests\Auth\AuthRequest;
 use App\Http\Requests\Auth\AuthRequestLogin;
@@ -63,6 +64,24 @@ class AuthController extends Controller
             return response()->json([
                 "success" => true,
                 "data" => $returnForgetPasswordDataFromService,
+                "errors" => null,
+            ], 200);
+        } catch (Exception $errors) {
+            return response()->json([
+                "success" => false,
+                "data" => null,
+                "errors" => $errors->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function checkOtp(AuthCheckOtpForgetPasswordRequest $authCheckOtpForgetPasswordRequest){
+        $validationDataCheckOtpForgetPassword = $authCheckOtpForgetPasswordRequest->validated();
+        try {
+            $returnDataCheckOtpForgetPasswordFromService = $this->auth_service->methodCheckOtpForgetPassword($validationDataCheckOtpForgetPassword);
+            return response()->json([
+                "success" => true,
+                "data" => $returnDataCheckOtpForgetPasswordFromService,
                 "errors" => null,
             ], 200);
         } catch (Exception $errors) {

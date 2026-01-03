@@ -3,9 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 
-    Route::middleware('api')->prefix('auth')->group(function(){
-        Route::post('register' , [AuthController::class , 'register'])->middleware(middleware: 'SetApiLocalLang');
-        Route::post('login' , [AuthController::class , 'login'])->middleware('SetApiLocalLang');
-        Route::post('forget-password' , [AuthController::class , 'forgetPassword'])->middleware('SetApiLocalLang');
+    Route::middleware('SetApiLocalLang')->prefix('auth')->group(function(){
+        Route::post('register' , [AuthController::class , 'register']);
+        Route::post('login' , [AuthController::class , 'login']);
+        Route::post('forget-password' , [AuthController::class , 'forgetPassword']);
+        Route::post('check-otp' , [AuthController::class , 'checkOtp']);
     });
 ?>

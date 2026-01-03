@@ -21,4 +21,6 @@ return [
     'password.max'      => 'The password may not be greater than 255 characters.',
 
     'login.required' => 'The login field is required.',
+    'otp.notFound' => 'The verification code you entered is incorrect.',
+    'otp.digits' => 'the otp failed must be 6 digits.'
 ];
