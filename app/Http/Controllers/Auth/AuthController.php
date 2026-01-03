@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\AuthCheckOtpForgetPasswordRequest;
 use App\Http\Requests\Auth\AuthForgetPasswordRequest;
 use App\Http\Requests\Auth\AuthRequest;
 use App\Http\Requests\Auth\AuthRequestLogin;
+use App\Http\Requests\Auth\AuthResetPasswordRequest;
 use App\Interfaces\Auth\AuthInterface;
 use App\Services\Auth\AuthService;
 use Exception;
@@ -75,13 +76,33 @@ class AuthController extends Controller
         }
     }
 
-    public function checkOtp(AuthCheckOtpForgetPasswordRequest $authCheckOtpForgetPasswordRequest){
+    public function checkOtp(AuthCheckOtpForgetPasswordRequest $authCheckOtpForgetPasswordRequest)
+    {
         $validationDataCheckOtpForgetPassword = $authCheckOtpForgetPasswordRequest->validated();
         try {
             $returnDataCheckOtpForgetPasswordFromService = $this->auth_service->methodCheckOtpForgetPassword($validationDataCheckOtpForgetPassword);
             return response()->json([
                 "success" => true,
                 "data" => $returnDataCheckOtpForgetPasswordFromService,
+                "errors" => null,
+            ], 200);
+        } catch (Exception $errors) {
+            return response()->json([
+                "success" => false,
+                "data" => null,
+                "errors" => $errors->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function resetPassword(AuthResetPasswordRequest $authResetPasswordRequest)
+    {
+        $validationAuthResetPassword = $authResetPasswordRequest->validated();
+        try {
+            $returnDataResetPasswordFromService = $this->auth_service->methodResetPasswordInterface($validationAuthResetPassword);
+            return response()->json([
+                "success" => true,
+                "data" => __('messages.updatePassword')   ,
                 "errors" => null,
             ], 200);
         } catch (Exception $errors) {

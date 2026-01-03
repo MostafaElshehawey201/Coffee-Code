@@ -8,5 +8,6 @@ use App\Http\Controllers\Auth\AuthController;
         Route::post('login' , [AuthController::class , 'login']);
         Route::post('forget-password' , [AuthController::class , 'forgetPassword']);
         Route::post('check-otp' , [AuthController::class , 'checkOtp']);
+        Route::post('reset-password' , [AuthController::class , 'resetPassword'])->middleware('auth:sanctum');
     });
 ?>

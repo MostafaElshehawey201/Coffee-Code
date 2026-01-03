@@ -22,5 +22,7 @@ return [
 
     'login.required' => 'The login field is required.',
     'otp.notFound' => 'The verification code you entered is incorrect.',
-    'otp.digits' => 'the otp failed must be 6 digits.'
+    'otp.digits' => 'the otp failed must be 6 digits.',
+    "otp.used" => 'This verification code cannot be used because it is already in use.',
+    "otp.expire_at" => "This verification code has expired.",
 ];

@@ -2,16 +2,19 @@
 
 namespace App\Repositories\Auth;
 
-use App\Interfaces\Auth\AuthCheckOtpForgetPasswordInterface;
 use Exception;
 use App\Models\Otp;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Interfaces\Auth\AuthInterface;
 use App\Interfaces\Auth\AuthLoginInterface;
+use App\Interfaces\Auth\AuthResetPasswordInterface;
 use App\Interfaces\Auth\AuthForgetPasswordInterface;
+use App\Interfaces\Auth\AuthCheckOtpForgetPasswordInterface;
 
-class AuthRepository implements AuthInterface, AuthLoginInterface, AuthForgetPasswordInterface, AuthCheckOtpForgetPasswordInterface
+class AuthRepository implements AuthInterface, AuthLoginInterface, AuthForgetPasswordInterface,
+ AuthCheckOtpForgetPasswordInterface , AuthResetPasswordInterface 
 {
     /**
      * Create a new class instance.
@@ -83,5 +86,28 @@ class AuthRepository implements AuthInterface, AuthLoginInterface, AuthForgetPas
         if(!$otp){
             throw new Exception(__('validation.otp.notFound'));
         }
+        if($otp->is_used == 1 ){
+            $otp->delete();
+            throw new Exception(__('validation.otp.used'));
+        }
+        if($otp->expire_at < now()){
+            $otp->delete();
+            throw new Exception(__('validation.otp.expire_at'));
+        }
+        $user = $otp->user;
+        $token = $user->createToken('auth-token')->plainTextToken;
+        $otp->update([
+            "is_used" => 1
+        ]);
+        return $token;
+    }
+
+    public function methodResetPasswordInterface($validationAuthResetPassword){
+        $user = Auth::user();
+        /** @var \App\Models\User $user */
+        $user->update([
+            "password" => $validationAuthResetPassword['password'],
+        ]);
+        return $user;
     }
 }
