@@ -3,6 +3,7 @@
         "noData" => 'No account with this data exists',
         "noPassword" => 'Incorrect credentials',
         "updatePassword" => 'Your password has been successfully updated.',
-        
+        'invalidToken' => 'Token used invalid',
+        'logout' => 'logout from Coffee Code Successfully',
     ]
 ?>
