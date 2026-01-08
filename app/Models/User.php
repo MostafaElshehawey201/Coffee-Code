@@ -51,4 +51,8 @@ class User extends Authenticatable
     public function otp(){
         return $this->hasMany(Otp::class);
     }
+
+    public function attachment(){
+        return $this->hasMany(Attachment::class);
+    }
 }

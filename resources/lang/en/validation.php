@@ -25,4 +25,6 @@ return [
     'otp.digits' => 'the otp failed must be 6 digits.',
     "otp.used" => 'This verification code cannot be used because it is already in use.',
     "otp.expire_at" => "This verification code has expired.",
+    'file.image' => 'The uploaded file must be an image.',
+    'file.mimes' => 'The image must be a file of type: png, jpg, jpeg, gif.',
 ];
