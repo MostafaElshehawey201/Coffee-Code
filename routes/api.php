@@ -24,6 +24,6 @@ Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
     });
 
     Route::prefix('categories')->group(function () {
-        Route::get('categories', [CategoryController::class, 'index']);
+        Route::get('all-categories', [CategoryController::class, 'allCategories']);
     });
 });
