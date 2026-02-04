@@ -32,7 +32,10 @@ class AuthCheckOtpForgetPasswordRequest extends FormRequest
 
     public function messages()
     {
-        return [];
+        return [
+            'otp.required' => __('validation.otp.required'),
+            'otp.digits' => __('validation.otp.digits'),
+        ];
     }
 
     public function failedValidation(Validator $validator)
@@ -40,22 +43,11 @@ class AuthCheckOtpForgetPasswordRequest extends FormRequest
         $errors = [];
         // $validateMessages = Lang::get('validation');
         foreach ($validator->errors()->getMessages() as $failed => $messages) {
-            // foreach ($messages as $message) {
-                $errors[$failed][] = [
-                    "message" => $messages[0],
+                $errors[$failed]= [
+                    "message" => $messages,
                 ];
                 break;
-            // }
         }
-        // if (is_array($validateMessages)) {
-        //     foreach ($validateMessages as $value) {
-        //         if (is_array($value) && $value['message'] && $value['message'] === $message) {
-        //             $errors[$failed][] = [
-        //                 "message" => $value['message'],
-        //             ];
-        //         }
-        //     }
-        // }
         throw new HttpResponseException(
             response()->json([
                 "success" => false,

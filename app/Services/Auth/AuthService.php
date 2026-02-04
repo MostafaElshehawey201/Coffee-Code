@@ -2,57 +2,67 @@
 
 namespace App\Services\Auth;
 
-use App\Interfaces\Auth\AuthCheckOtpForgetPasswordInterface;
-use App\Interfaces\Auth\AuthForgetPasswordInterface;
-use App\Interfaces\Auth\AuthInterface;
-use App\Interfaces\Auth\AuthLoginInterface;
-use App\Interfaces\Auth\AuthResetPasswordInterface;
-use PharIo\Manifest\Author;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\Auth\AuthRepository;
+use App\Exceptions\Auth\OtpNotFoundException;
+use App\Exceptions\Auth\UserNotFoundException;
+use App\Exceptions\Auth\PasswordIsErrorException;
+use App\Exceptions\Auth\EmailAlreadyUsedException;
+use App\Exceptions\Auth\PhoneAlreadyUsedException;
 
-class AuthService implements AuthInterface ,AuthLoginInterface  , AuthForgetPasswordInterface 
-, AuthCheckOtpForgetPasswordInterface , AuthResetPasswordInterface
+class AuthService
 {
-    public $sendDataRegisterFromServiceToRepositoryByInterface;
-    public $sendDataLoginFromServiceToRepositoryByInterface;
-    public $sendDataForgetPasswordFromServiceToRepository;
-    public $sendDataCheckOtpForgetPasswordFromServiceToRepositoryByInterface;
-    public $sendDataResetPasswordFromServiceToRepositoryByInterface;
-    /**
-     * Create a new class instance.
-     */
-    public function __construct(AuthInterface $authInterface , AuthLoginInterface $authLoginInterface 
-    , AuthForgetPasswordInterface $authForgetPasswordInterface , AuthCheckOtpForgetPasswordInterface $authCheckOtpForgetPasswordInterface ,
-     AuthResetPasswordInterface $authResetPasswordInterface)
+    public function __construct(protected AuthRepository $authRepository) {}
+
+    public function register($DTO)
     {
-        $this->sendDataRegisterFromServiceToRepositoryByInterface = $authInterface;
-        $this->sendDataLoginFromServiceToRepositoryByInterface = $authLoginInterface;
-        $this->sendDataForgetPasswordFromServiceToRepository = $authForgetPasswordInterface;
-        $this->sendDataCheckOtpForgetPasswordFromServiceToRepositoryByInterface = $authCheckOtpForgetPasswordInterface;
-        $this->sendDataResetPasswordFromServiceToRepositoryByInterface = $authResetPasswordInterface;
-    }
-    public function methodAuthInterface($validationAuthRequest){
-        $returnDataRegisterFromRepository = $this->sendDataRegisterFromServiceToRepositoryByInterface->methodAuthInterface($validationAuthRequest);
-        return $returnDataRegisterFromRepository;
-    }
-
-    public function methodLoginInterface($validationDataRequest){
-        $returnDataLoginFromService = $this->sendDataLoginFromServiceToRepositoryByInterface->methodLoginInterface($validationDataRequest);
-        $token = $returnDataLoginFromService->createToken('auth-token')->plainTextToken;
-        return $token;
+        $email = $this->authRepository->whereEmail($DTO->email);
+        if ($email) {
+            throw new EmailAlreadyUsedException();
+        }
+        $phone = $this->authRepository->wherePhone($DTO->phone);
+        if ($phone) {
+            throw new PhoneAlreadyUsedException(__('validation.phone.used'));
+        }
+        return $this->authRepository->create($DTO);
     }
 
-    public function methodForgetPasswordInterface($validationForgetPasswordRequest){
-        $returnDataForgetPasswordFromService = $this->sendDataForgetPasswordFromServiceToRepository->methodForgetPasswordInterface($validationForgetPasswordRequest); 
-        return $returnDataForgetPasswordFromService;
+    public function login($DTO)
+    {
+        $email = $this->authRepository->whereEmail($DTO->login);
+        $phone = $this->authRepository->wherePhone($DTO->login);
+        if (!$email && !$phone) {
+            throw new UserNotFoundException();
+        }
+        $user = $this->authRepository->first($DTO);
+        $password = $this->authRepository->Password($user, $DTO);
+        if ($password == false) {
+            throw new PasswordIsErrorException();
+        }
+        return $user->createToken('auth_token')->plainTextToken;
     }
-    public function methodCheckOtpForgetPassword($validationDataCheckOtpForgetPassword){
-        $returnDataForgetPasswordFromRepository = $this->sendDataCheckOtpForgetPasswordFromServiceToRepositoryByInterface->methodCheckOtpForgetPassword($validationDataCheckOtpForgetPassword);
-        return $returnDataForgetPasswordFromRepository;
+    public function forgetPassword($DTO){
+        $user = $this->authRepository->whereLogin($DTO);
+        if(!$user){
+            throw new UserNotFoundException();
+        }
+        $otp = rand(100000 , 999999);
+        $this->authRepository->createOtp($otp , $user);
+        return $otp;
     }
 
-    public function methodResetPasswordInterface($validationAuthResetPassword){
-        $returnDataResetPasswordFromRepository = $this->sendDataResetPasswordFromServiceToRepositoryByInterface->methodResetPasswordInterface($validationAuthResetPassword);
-        $returnDataResetPasswordFromRepository->currentAccessToken()->delete();
-        return $returnDataResetPasswordFromRepository;
+    public function checkOtp($checkOtp){
+        $otp = $this->authRepository->whereOtp($checkOtp);
+        if(!$otp){
+            throw new OtpNotFoundException();
+        }
+        $user = $this->authRepository->finUserOtp($otp);
+        return $user->createToken('auth_token')->plainTextToken;
+        
+    }
+
+    public function resetPassword($DTOPassword){
+        $user = Auth::guard('sanctum')->user();
+        return $this->authRepository->resetPassword($user , $DTOPassword->password);
     }
 }

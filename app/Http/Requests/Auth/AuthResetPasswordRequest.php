@@ -41,8 +41,8 @@ class AuthResetPasswordRequest extends FormRequest
     {
         $errors = [] ;
         foreach($validator->errors()->getMessages() as $failed => $messages){
-            $errors[$failed][]=[
-                "message" => $messages[0],
+            $errors[$failed]=[
+                "message" => $messages,
             ];
             break;
         }

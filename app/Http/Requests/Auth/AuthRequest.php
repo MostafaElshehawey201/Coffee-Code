@@ -55,23 +55,13 @@ class AuthRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         $errors = [];
-        $validationMassages = Lang::get('validation');
+        // $validationMassages = Lang::get('validation');
         foreach ($validator->errors()->getMessages() as $field => $messages) {
             foreach ($messages as $message) {
-                $errors[$field][] = [
+                $errors[$field] = [
                     'message' => $message
                 ];
                 break;
-            }
-        }
-        if (is_array($validationMassages)) {
-            foreach ($validationMassages as $value) {
-                if (is_array($value) && isset($value['messages']) && $value['messages'] === $message) {
-                    $foundMessage = $value['messages'];
-                    $errors[$field][] = [
-                        "message" => $foundMessage
-                    ];
-                }
             }
         }
         throw new HttpResponseException(
@@ -79,7 +69,18 @@ class AuthRequest extends FormRequest
                 "success" => false,
                 "data" => null,
                 "errors" => $errors
-            ])
+            ], 422)
         );
     }
+
+    //     public function failedValidation(Validator $validator)
+    // {
+    //     throw new HttpResponseException(
+    //         response()->json([
+    //             "success" => false,
+    //             "data" => null,
+    //             "errors" => $validator->errors()->map(fn($message) => ["message" => $message])->toArray()
+    //         ], 422)
+    //     );
+    // }
 }

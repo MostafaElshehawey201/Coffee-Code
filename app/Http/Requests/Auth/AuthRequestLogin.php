@@ -44,22 +44,12 @@ class AuthRequestLogin extends FormRequest
     public function failedValidation(Validator $validator)
     {
         $errors = [];
-        $validationMessages = Lang::get('validation');
         foreach ($validator->errors()->getMessages() as $field => $messages) {
             foreach ($messages as $message) {
-                $errors[$field][] = [
+                $errors[$field] = [
                     "message" => $message,
                 ];
                 break;
-            }
-        }
-        if (is_array($validationMessages)) {
-            foreach ($validationMessages as $value) {
-                if (is_array($value) && isset($value['messages']) && $value['messages'] === $message) {
-                    $errors[$field][] = [
-                        "message" => $value['messages'],
-                    ];
-                }
             }
         }
         throw new HttpResponseException(
