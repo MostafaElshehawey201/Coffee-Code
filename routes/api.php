@@ -23,8 +23,7 @@ Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
         Route::post('logout-profile', [UserController::class, 'logoutProfile']);
     });
 
-    Route::prefix('categories')->group(function(){    
-    Route::get('categories', [CategoryController::class, 'index']);
+    Route::prefix('categories')->group(function () {
+        Route::get('categories', [CategoryController::class, 'index']);
     });
-
 });

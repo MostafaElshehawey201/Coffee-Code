@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Seeders\Translation\CategorySeeder;
+use Database\Seeders\Translation\SubCategorySeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +18,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(
-            CategorySeeder::class
+            [
+            CategorySeeder::class,
+            SubCategorySeeder::class,
+            ]
         );
     }
 }

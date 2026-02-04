@@ -44,13 +44,54 @@ class CategorySeeder extends Seeder
                     ['local' => 'en', 'key' => 'body', 'value' => 'Various desserts'],
                 ]
             ],
+            [
+                'user_id' => 1,
+                'is_active' => true,
+                'translations' => [
+                    ['local' => 'ar', 'key' => 'title', 'value' => 'مقبلات'],
+                    ['local' => 'en', 'key' => 'title', 'value' => 'Appetizers'],
+                    ['local' => 'ar', 'key' => 'body', 'value' => 'كل أنواع المقبلات'],
+                    ['local' => 'en', 'key' => 'body', 'value' => 'All kinds of appetizers'],
+                ]
+            ],
+            [
+                'user_id' => 1,
+                'is_active' => true,
+                'translations' => [
+                    ['local' => 'ar', 'key' => 'title', 'value' => 'وجبات رئيسية'],
+                    ['local' => 'en', 'key' => 'title', 'value' => 'Main Courses'],
+                    ['local' => 'ar', 'key' => 'body', 'value' => 'كل أنواع الوجبات الرئيسية'],
+                    ['local' => 'en', 'key' => 'body', 'value' => 'All types of main courses'],
+                ]
+            ],
+            [
+                'user_id' => 1,
+                'is_active' => true,
+                'translations' => [
+                    ['local' => 'ar', 'key' => 'title', 'value' => 'مشروبات غازية'],
+                    ['local' => 'en', 'key' => 'title', 'value' => 'Soft Drinks'],
+                    ['local' => 'ar', 'key' => 'body', 'value' => 'كل أنواع المشروبات الغازية'],
+                    ['local' => 'en', 'key' => 'body', 'value' => 'All types of soft drinks'],
+                ]
+            ],
+            [
+                'user_id' => 1,
+                'is_active' => true,
+                'translations' => [
+                    ['local' => 'ar', 'key' => 'title', 'value' => 'مشروبات ساخنة'],
+                    ['local' => 'en', 'key' => 'title', 'value' => 'Hot Drinks'],
+                    ['local' => 'ar', 'key' => 'body', 'value' => 'كل أنواع المشروبات الساخنة'],
+                    ['local' => 'en', 'key' => 'body', 'value' => 'All types of hot drinks'],
+                ]
+            ],
         ];
 
         foreach ($categories as $singleCategory) {
-            $category = category::create([
+            $category = Category::create([
                 'user_id' => $singleCategory['user_id'],
                 'is_active' => $singleCategory['is_active'],
             ]);
+
             $category->translations()->createMany($singleCategory['translations']);
         }
     }
