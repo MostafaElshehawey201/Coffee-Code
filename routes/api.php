@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Auth\AuthController;
 
 Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
     Route::prefix('auth')->group(function () {
@@ -21,4 +22,9 @@ Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
         Route::post('update-profile', [UserController::class, 'updateProfile']);
         Route::post('logout-profile', [UserController::class, 'logoutProfile']);
     });
+
+    Route::prefix('categories')->group(function(){    
+    Route::get('categories', [CategoryController::class, 'index']);
+    });
+
 });

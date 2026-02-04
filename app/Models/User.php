@@ -55,4 +55,8 @@ class User extends Authenticatable
     public function attachment(){
         return $this->hasMany(Attachment::class);
     }
+
+    public function categories(){
+        return $this->hasMany(category::class);
+    }
 }
