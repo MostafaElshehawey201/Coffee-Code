@@ -11,7 +11,7 @@ class SubCategory extends Model
     ];
 
     public function created_by(){
-        return $this->belongsTo(User::class , 'category_id' , 'id');
+        return $this->belongsTo(User::class , 'created_by' , 'id');
     }
 
     public function translations(){

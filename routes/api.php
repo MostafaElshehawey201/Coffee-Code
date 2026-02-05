@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\SubCategoryController;
 
 Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
     Route::prefix('auth')->group(function () {
@@ -25,5 +26,9 @@ Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
 
     Route::prefix('categories')->group(function () {
         Route::get('all-categories', [CategoryController::class, 'allCategories']);
+    });
+
+    Route::prefix('sub-categories')->group(function(){
+        Route::get('all-sub-categories' , [SubCategoryController::class , 'allSubCategories']);
     });
 });
