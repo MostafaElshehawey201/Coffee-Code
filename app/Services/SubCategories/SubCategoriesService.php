@@ -2,6 +2,7 @@
 
 namespace App\Services\SubCategories;
 
+use App\Exceptions\SubCategories\NotFoundSubCategoriesException;
 use App\Repositories\SubCategories\SubCategoriesRepository;
 
 class SubCategoriesService
@@ -14,7 +15,17 @@ class SubCategoriesService
         //
     }
 
-    public function allSubCategories(){
+    public function allSubCategories()
+    {
         return $this->sub_categories_repository->getSubCategories();
+    }
+
+    public function subCategory($category_id)
+    {
+        $subCategory = $this->sub_categories_repository->subCategoryWhere($category_id);
+        if ($subCategory == null) {
+            throw new NotFoundSubCategoriesException(404);
+        }
+        return $subCategory;
     }
 }
