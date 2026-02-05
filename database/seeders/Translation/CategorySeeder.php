@@ -2,9 +2,11 @@
 
 namespace Database\Seeders\Translation;
 
+use App\Models\User;
 use App\Models\category;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Hash;
 
 class CategorySeeder extends Seeder
 {
@@ -85,7 +87,6 @@ class CategorySeeder extends Seeder
                 ]
             ],
         ];
-
         foreach ($categories as $singleCategory) {
             $category = Category::create([
                 'user_id' => $singleCategory['user_id'],

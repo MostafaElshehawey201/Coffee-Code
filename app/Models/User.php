@@ -63,4 +63,8 @@ class User extends Authenticatable
     public function subCategories(){
         return $this->hasMany(SubCategory::class , 'created_by' , 'id');
     }
+
+    public function menus(){
+        return $this->hasMany(Menu::class , 'created_by' , 'id');
+    }
 }
