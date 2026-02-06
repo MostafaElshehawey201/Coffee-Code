@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SubCategoryController;
 
 Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
@@ -26,10 +27,24 @@ Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
 
     Route::prefix('categories')->group(function () {
         Route::get('all-categories', [CategoryController::class, 'allCategories']);
-        });
-        
-        Route::prefix('sub-categories')->group(function(){
-            Route::get('all-sub-categories' , [SubCategoryController::class , 'allSubCategories']);
-            Route::get('category/{category_id}/subCategory' , [SubCategoryController::class , 'subCategory']);
     });
+
+    Route::prefix('sub-categories')->group(function () {
+        Route::get('all-sub-categories', [SubCategoryController::class, 'allSubCategories']);
+        Route::get('category/{category_id}/subCategory', [SubCategoryController::class, 'subCategory']);
+    });
+
+    Route::prefix('menus')->group(function(){
+        Route::get('{category_id}/{subCategory_id}/menu' , [MenuController::class , 'menu']);
+    });
+});
+
+Route::prefix('admin-panel')->middleware(['auth:sanctum','SetApiLocalLang'])->group(function(){
+    Route::prefix('categories')->group(function(){
+        Route::get('all-categories' , [CategoryController::class , 'allCategories']);
+        Route::post('create-category' , [CategoryController::class , 'createCategory']);
+        Route::post('editCategory/{category_id}' , [CategoryController::class , 'editCategory']);
+    });
+
+    
 });

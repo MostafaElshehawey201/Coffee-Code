@@ -21,7 +21,9 @@ class category extends Model
     }
 
     public function translate($key , $local = null){
+        // خلي البرنامج علي حسب اللغة ال المستخدم طلبها 
         $local = $local ?? app()->getLocale();
+        // هات البباتات علي حسب اللغة ال المتخدم طلبها 
         $translation = $this->translations()->where('key' , $key)->where('local' , $local)->first();
         return $translation ? $translation->value : null ;
     }

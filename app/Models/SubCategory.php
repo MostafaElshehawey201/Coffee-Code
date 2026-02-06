@@ -23,7 +23,7 @@ class SubCategory extends Model
     }
 
     public function translate($key , $local = null){
-        // اما هيساوي ال local  ال المستخدم طلبة او لو المستخدم مطلبش لغة ف هيبق لغة النظام هي اللغة الاصلية للبرنامج 
+        // دي ال بتجبلي البيانات علي حسب اللغة ال المستخدم طلب ان البيانات تيجي بيها
         $local = $local ?? app()->getLocale();
         $translation = $this->translations()->where('key' , $key)->where('local' , $local)->first();
         return $translation ? $translation->value : null ;

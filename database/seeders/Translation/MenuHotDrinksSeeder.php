@@ -191,14 +191,14 @@ class MenuHotDrinksSeeder extends Seeder
                 ]
             ],
         ];
-        foreach($menus as $menu){
+        foreach($menus as $menuData){
             $menu = Menu::create([
-                "created_by" => $menu['created_by'],
-                "sub_category_id" => $menu['sub_category_id'],
-                "is_active" => $menu['is_active'],
+                "created_by" => $menuData['created_by'],
+                "sub_category_id" => $menuData['sub_category_id'],
+                "is_active" => $menuData['is_active'],
             ]);
+            $menu->translations()->createMany($menuData['translations']);
         }
-        $menu->translations()->createMany($menu['translations']);
     }
 
 }
