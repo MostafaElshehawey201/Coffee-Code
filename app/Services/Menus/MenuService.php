@@ -2,6 +2,7 @@
 
 namespace App\Services\Menus;
 
+use App\Exceptions\Menu\AdminPanel\notCreatedMenuException;
 use App\Repositories\Menus\MenuRepository;
 use App\Exceptions\Menu\MenuNotFoundException;
 
@@ -20,6 +21,14 @@ class MenuService
         $menu = $this->menu_repository->getMenu($subCategory_id);
         if (!$menu) {
             throw new MenuNotFoundException(404);
+        }
+        return $menu;
+    }
+
+    public function createMenu($DTO , $createMenuRequest ,$sub_category_id){
+        $menu = $this->menu_repository->createMenu($DTO , $createMenuRequest , $sub_category_id);
+        if(!$menu){
+            throw new notCreatedMenuException(422);
         }
         return $menu;
     }

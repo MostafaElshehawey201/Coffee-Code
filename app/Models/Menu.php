@@ -22,10 +22,11 @@ class Menu extends Model
         return $this->morphMany(translation::class , 'translatable');
     }
 
-    // دي ال بتجبلي البيانات مترجمة حسب اللغة ال المستخدم طلبها
+
     public function translate($key , $local = null){
         $local = $local ?? app()->getLocale();
         $translation = $this->translations()->where('key' , $key)->where('local' , $local)->first();
-        return $translation ? $translation->value : null;
+        return $translation ? $translation->value : null ;
     }
+
 }
