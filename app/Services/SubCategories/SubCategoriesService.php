@@ -28,4 +28,8 @@ class SubCategoriesService
         }
         return $subCategory;
     }
+
+    public function createSubCategory($DtoCreateSubCategory){
+        $this->sub_categories_repository->createSubCategory($DtoCreateSubCategory);
+    }
 }

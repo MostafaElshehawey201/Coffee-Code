@@ -8,12 +8,13 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\DTO\UpdateCategoryDataTransferObject;
 use App\Services\Categories\CategoriesService;
-use App\Http\Requests\Category\updateCategoryRequest;
+// use App\Http\Requests\Category\updateCategoryRequest;
 use App\Http\Resources\Categories\CategoriesResources;
 use App\Exceptions\Categories\CategoriesNotFoundException;
 use App\Http\Resources\Categories\AdminPanel\editCategoryResource;
 use App\Exceptions\Categories\AdminPanel\CategoryNotFoundException;
 use App\Http\Resources\Categories\AdminPanel\UpdateCategoryResource;
+use App\Http\Requests\Category\AdminPanel\updateCategoryRequest;
 
 class CategoryController extends Controller
 {

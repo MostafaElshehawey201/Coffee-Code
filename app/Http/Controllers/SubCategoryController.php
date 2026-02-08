@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\CreateSubCategoryDataTransferObject;
 use App\Exceptions\SubCategories\NotFoundSubCategoriesException;
+use App\Http\Requests\SubCategories\AdminPanel\CreateSubCategoriesRequest;
 use App\Http\Resources\SubCategories\SubCategoriesResource;
 use App\Services\SubCategories\SubCategoriesService;
 use App\Traits\ApiResponse;
@@ -35,5 +37,11 @@ class SubCategoryController extends Controller
         }catch(Exception $e){
             return $this->error($e->getMessage() , 500);
         }
+    }
+
+    public function createSubCategory(CreateSubCategoriesRequest $createSubCategoriesRequest , $category_id){
+        $validation = $createSubCategoriesRequest->validated();
+        $DtoCreateSubCategory = new CreateSubCategoryDataTransferObject($validation , $category_id);
+        $this->sub_categories_service->createSubCategory($DtoCreateSubCategory);
     }
 }

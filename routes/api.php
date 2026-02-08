@@ -46,5 +46,11 @@ Route::prefix('admin-panel')->middleware(['auth:sanctum','SetApiLocalLang'])->gr
         Route::post('editCategory/{category_id}' , [CategoryController::class , 'editCategory']);
     });
 
+    Route::prefix('sub-categories')->group(function(){
+        Route::get('{category_id}/sub-categories' , [SubCategoryController::class , 'subCategory']);
+        Route::post('{category_id}/create-sub-category' , [SubCategoryController::class , 'createSubCategory']);
+        Route::post('edit-sub-category/{subCategory_id}' , [SubCategoryController::class , 'editSubCategory']);
+    });
+
     
 });
