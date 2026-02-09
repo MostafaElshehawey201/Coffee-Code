@@ -59,4 +59,11 @@ class MenuRepository
             ]);
         });
     }
+
+    public function getFavoriteMenu($menu_id)
+    {
+        return DB::transaction(function () use ($menu_id) {
+            return FavoriteMenu::where('menu_id', $menu_id)->get();
+        });
+    }
 }

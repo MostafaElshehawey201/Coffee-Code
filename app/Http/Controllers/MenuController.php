@@ -15,6 +15,7 @@ use App\Http\Requests\Menu\AdminPanel\CreateMenuRequest;
 use App\Http\Resources\Menu\AdminPanel\CreateMenuResource;
 use App\Exceptions\Menu\AdminPanel\notCreatedMenuException;
 use App\Http\Resources\Menu\addMenuToFavoriteResource;
+use App\Http\Resources\Menu\ShowFavoriteMenuResource;
 
 class MenuController extends Controller
 {
@@ -49,7 +50,7 @@ class MenuController extends Controller
         }
     }
 
-    public function addMenuFavorite($category_id , $subCategory_id , $menu_id)
+    public function addMenuFavorite($category_id, $subCategory_id, $menu_id)
     {
         try {
             $menu = $this->menu_service->addMenuFavorite($menu_id);
@@ -59,6 +60,19 @@ class MenuController extends Controller
             return $this->error($e->getMessage(), 422);
         } catch (CantAddMenuToFavoriteException $e) {
             return $this->error($e->getMessage(), 422);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage(), 500);
+        }
+    }
+
+    public function showMenuFavorite($subCategory_id, $menu_id)
+    {
+        try {
+            $menus = $this->menu_service->showMenuFavorite($menu_id);
+            $apiResourceMenus = ShowFavoriteMenuResource::collection($menus);
+            return $this->success($apiResourceMenus, 200);
+        } catch (MenuNotFoundException $e) {
+            return $this->error($e->getMessage(), 404);
         } catch (Exception $e) {
             return $this->error($e->getMessage(), 500);
         }

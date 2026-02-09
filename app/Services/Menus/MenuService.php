@@ -2,11 +2,13 @@
 
 namespace App\Services\Menus;
 
-use App\Exceptions\Menu\AdminPanel\notCreatedMenuException;
-use App\Exceptions\Menu\CantAddMenuToFavoriteException;
+use App\Models\Menu;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\Menus\MenuRepository;
 use App\Exceptions\Menu\MenuNotFoundException;
 use Brick\Math\Exception\NegativeNumberException;
+use App\Exceptions\Menu\CantAddMenuToFavoriteException;
+use App\Exceptions\Menu\AdminPanel\notCreatedMenuException;
 
 class MenuService
 {
@@ -27,22 +29,32 @@ class MenuService
         return $menu;
     }
 
-    public function createMenu($DTO , $createMenuRequest ,$sub_category_id){
-        $menu = $this->menu_repository->createMenu($DTO , $createMenuRequest , $sub_category_id);
-        if(!$menu){
+    public function createMenu($DTO, $createMenuRequest, $sub_category_id)
+    {
+        $menu = $this->menu_repository->createMenu($DTO, $createMenuRequest, $sub_category_id);
+        if (!$menu) {
             throw new notCreatedMenuException(422);
         }
         return $menu;
     }
 
-    public function addMenuFavorite($menu_id){
-        if($menu_id <= 0){
+    public function addMenuFavorite($menu_id)
+    {
+        if ($menu_id <= 0) {
             throw new NegativeNumberException(422);
         }
         $menu = $this->menu_repository->addMenuFavorite($menu_id);
-        if(!$menu){
+        if (!$menu) {
             throw new CantAddMenuToFavoriteException(422);
         }
         return $menu;
+    }
+
+    public function showMenuFavorite($menu_id) {
+        $menus = $this->menu_repository->getFavoriteMenu($menu_id);
+        if($menus == null){
+            throw new MenuNotFoundException(422);
+        }
+        return $menus;
     }
 }

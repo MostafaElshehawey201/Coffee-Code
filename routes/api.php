@@ -37,7 +37,7 @@ Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
     Route::middleware('auth:sanctum')->prefix('menus')->group(function(){
         Route::get('{category_id}/{subCategory_id}/menu' , [MenuController::class , 'menu']);
         Route::post('{category_id}/{subCategory_id}/{menu_id}/addMenuFavorite' , [MenuController::class , 'addMenuFavorite']);
-        Route::get('{category_id}/{subCategory_id}/menu/showMenuFavorite' , [MenuController::class , 'showMenuFavorite']);
+        Route::get('{subCategory_id}/{menu_id}/showMenuFavorite' , [MenuController::class , 'showMenuFavorite']);
         Route::get('{category_id}/{subCategory_id}/menu/deleteMenuFavorite' , [MenuController::class , 'deleteMenuFavorite']);
     });
 });
