@@ -67,4 +67,8 @@ class User extends Authenticatable
     public function menus(){
         return $this->hasMany(Menu::class , 'created_by' , 'id');
     }
+
+    public function favoriteMenus(){
+        return $this->hasMany(FavoriteMenu::class);
+    }
 }

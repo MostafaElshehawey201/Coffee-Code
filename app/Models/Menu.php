@@ -18,6 +18,10 @@ class Menu extends Model
         return $this->belongsTo(SubCategory::class , 'sub_category_id' , 'id');
     }
 
+    public function favoriteMenus(){
+        return $this->hasMany(FavoriteMenu::class);
+    }
+
     public function translations(){
         return $this->morphMany(translation::class , 'translatable');
     }

@@ -34,8 +34,11 @@ Route::prefix('v1')->middleware('SetApiLocalLang')->group(function () {
         Route::get('category/{category_id}/subCategory', [SubCategoryController::class, 'subCategory']);
     });
 
-    Route::prefix('menus')->group(function(){
+    Route::middleware('auth:sanctum')->prefix('menus')->group(function(){
         Route::get('{category_id}/{subCategory_id}/menu' , [MenuController::class , 'menu']);
+        Route::post('{category_id}/{subCategory_id}/{menu_id}/addMenuFavorite' , [MenuController::class , 'addMenuFavorite']);
+        Route::get('{category_id}/{subCategory_id}/menu/showMenuFavorite' , [MenuController::class , 'showMenuFavorite']);
+        Route::get('{category_id}/{subCategory_id}/menu/deleteMenuFavorite' , [MenuController::class , 'deleteMenuFavorite']);
     });
 });
 
@@ -54,8 +57,7 @@ Route::prefix('admin-panel')->middleware(['auth:sanctum','SetApiLocalLang'])->gr
 
     Route::prefix('menus')->group(function(){
         Route::get('{category_id}/{subCategory_id}/menu' , [MenuController::class , 'menu']);
-        Route::post('{category_id}/{sub_category_id}/create-menu' , [MenuController::class , 'createMenu']);
-        Route::post('{category_id}/{sub_category_id}/editMenu' , [MenuController::class , 'editMenu']);
-
+        Route::post('{sub_category_id}/create-menu' , [MenuController::class , 'createMenu']);
+        Route::post('{sub_category_id}/editMenu' , [MenuController::class , 'editMenu']);
     });
 });

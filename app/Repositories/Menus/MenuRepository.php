@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Menus;
 
+use App\Models\FavoriteMenu;
 use App\Models\Menu;
 use App\Models\translation;
 use Illuminate\Support\Facades\DB;
@@ -43,9 +44,19 @@ class MenuRepository
                     "key" => "body",
                     "value" => $DTO->$bodyLang,
                     "translatable_id" => $menu->id
-                ]); 
+                ]);
             }
             return $menu;
+        });
+    }
+
+    public function addMenuFavorite($menu_id)
+    {
+        return DB::transaction(function () use ($menu_id) {
+            return FavoriteMenu::create([
+                "user_id" => Auth::guard('sanctum')->id(),
+                "menu_id" => $menu_id,
+            ]);
         });
     }
 }
